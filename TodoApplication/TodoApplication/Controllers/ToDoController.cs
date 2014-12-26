@@ -42,7 +42,7 @@ namespace TodoApplication.Controllers
     }
 
     // DELETE api/todo/5
-    public void Delete(Guid id)
+    public void Delete([FromUri]Guid id)
     {
       _todoRepository.Delete(id);
     }
