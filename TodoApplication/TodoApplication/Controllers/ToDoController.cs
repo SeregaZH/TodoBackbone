@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Http;
 using TodoApplication.Interfaces.Repositories;
 using TodoApplication.Models;
@@ -8,43 +8,51 @@ namespace TodoApplication.Controllers
 {
   public class ToDoController : ApiController
   {
-    private readonly IToDoRepository _todoRepository;
+    private readonly IToDoRepositoryAsync _todoRepositoryAsync;
 
-    public ToDoController(IToDoRepository todoRepository)
+    public ToDoController(IToDoRepositoryAsync todoRepositoryAsync)
     {
-      _todoRepository = todoRepository;
+      _todoRepositoryAsync = todoRepositoryAsync;
     }
 
     // GET api/todo
-    public IEnumerable<TodoItem> Get()
+    public async Task<IHttpActionResult> Get()
     {
-      return _todoRepository.GetAll();
+      return Ok(await _todoRepositoryAsync.GetAllAsync());
     }
 
     // GET api/todo/{Guid}
-    public TodoItem Get(Guid id)
+    public async Task<IHttpActionResult> Get(Guid id)
     {
-      return _todoRepository.Get(id);
+      var item = await _todoRepositoryAsync.GetAllAsync();
+      if (item != null)
+      {
+        return Ok(item);
+      }
+
+      return NotFound();
     }
 
     // POST api/todo
-    public Guid Post(TodoItem item)
+    public async Task<IHttpActionResult> Post(TodoItem item)
     {
       item.Id = Guid.NewGuid();
-      _todoRepository.Create(item);
-      return item.Id;
+      await _todoRepositoryAsync.CreateAsync(item);
+      return Ok(item.Id);
     }
 
     // PUT api/todo
-    public void Put(TodoItem item)
+    public async Task<IHttpActionResult> Put(TodoItem item)
     {
-      _todoRepository.Update(item);
+      await _todoRepositoryAsync.UpdateAsync(item);
+      return Ok();
     }
 
     // DELETE api/todo/5
-    public void Delete([FromUri]Guid id)
+    public async Task<IHttpActionResult> Delete([FromUri]Guid id)
     {
-      _todoRepository.Delete(id);
+      await _todoRepositoryAsync.DeleteAsync(id);
+      return Ok();
     }
   }
 }

@@ -9,7 +9,8 @@ define('views/TodoView',['jquery','underscore', 'backbone', 'global'], function(
             'dblclick label': 'edit',
             'keypress .edit': 'updateOnEnter',
             'click .destroy': 'clear',
-            'blur .edit': 'close'
+            'blur .edit': 'close',
+            'click .toggle': 'toggle'
         },
         initialize: function() {
             this.listenTo(this.model, 'change', this.render);
@@ -17,6 +18,7 @@ define('views/TodoView',['jquery','underscore', 'backbone', 'global'], function(
         },
         render: function() {
             this.$el.html( this.template( this.model.attributes ) );
+            this.$el.toggleClass('completed', !this.model.get('IsActive'));
             this.$input = this.$('.edit');
             return this;
         },
@@ -36,6 +38,13 @@ define('views/TodoView',['jquery','underscore', 'backbone', 'global'], function(
         },
         clear: function(){
             this.model.destroy();
+        },
+        edit: function(){
+            this.$el.addClass('editing');
+            this.$input.focus();
+        },
+        toggle: function(){
+            this.model.toggle();
         }
     });
 

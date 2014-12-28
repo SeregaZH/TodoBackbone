@@ -1,62 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Migrations;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using TodoApplication.Interfaces.Repositories;
 using TodoApplication.Models;
 
 namespace TodoApplication.Repositories
 {
-  public class ToDoRepository : IToDoRepository
+  public class ToDoRepositoryAsync : IToDoRepositoryAsync
   {
     private readonly ToDoContext _doContext;
     
-    public ToDoRepository()
+    public ToDoRepositoryAsync()
     {
       _doContext = new ToDoContext();
     }
     
-    public void Create(TodoItem item)
+    public async Task CreateAsync(TodoItem item)
     {
       _doContext.Todos.Add(item);
-      _doContext.SaveChanges();
+      await _doContext.SaveChangesAsync();
     }
 
-    public void Delete(TodoItem item)
+    public async Task DeleteAsync(TodoItem item)
     {
       _doContext.Todos.Remove(item);
-      _doContext.SaveChanges();
+      await _doContext.SaveChangesAsync();
     }
 
-    public void Delete(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
       var deletedItem = _doContext.Todos.Find(id);
       if (deletedItem != null)
       {
         _doContext.Todos.Remove(deletedItem);
-        _doContext.SaveChanges();
+        await _doContext.SaveChangesAsync();
       }
     }
 
-    public void Update(TodoItem item)
+    public async Task UpdateAsync(TodoItem item)
     {
       var updatedItem = _doContext.Todos.Find(item.Id);
 
       if (updatedItem != null)
       {
         _doContext.Entry(updatedItem).CurrentValues.SetValues(item);
-        _doContext.SaveChanges();
+        await _doContext.SaveChangesAsync();
       }
     }
 
-    public TodoItem Get(Guid id)
+    public async Task<TodoItem> GetAsync(Guid id)
     {
-      return _doContext.Todos.Find(id);
+      return await _doContext.Todos.FindAsync(id);
     }
 
-    public IEnumerable<TodoItem> GetAll()
+    public async Task<IEnumerable<TodoItem>> GetAllAsync()
     {
-      return _doContext.Todos.AsEnumerable();
+      return await _doContext.Todos.ToListAsync();
     }
   }
 }

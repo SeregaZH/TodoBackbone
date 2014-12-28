@@ -173,12 +173,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\Repositories\IRepository.cs" />
-    <Compile Include="Interfaces\Repositories\IToDoRepository.cs" />
+    <Compile Include="Interfaces\Repositories\IRepositoryAsync.cs" />
+    <Compile Include="Interfaces\Repositories\IToDoRepositoryAsync.cs" />
     <Compile Include="Models\TodoItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ToDoContext.cs" />
-    <Compile Include="Repositories\ToDoRepository.cs" />
+    <Compile Include="Repositories\ToDoRepositoryAsync.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />

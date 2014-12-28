@@ -12,7 +12,7 @@ namespace TodoApplication
     public static void RegisterComponents()
     {
       var container = new UnityContainer();
-      container.RegisterType<IToDoRepository, ToDoRepository>(new ContainerControlledLifetimeManager());
+      container.RegisterType<IToDoRepositoryAsync, ToDoRepositoryAsync>(new ContainerControlledLifetimeManager());
       container.RegisterType<ToDoController, ToDoController>();
       GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
     }

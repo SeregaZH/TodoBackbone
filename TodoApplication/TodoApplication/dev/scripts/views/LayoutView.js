@@ -9,7 +9,6 @@ define('views/LayoutView',
         return {
             Name: this.$input.val().trim(),
             Note: '',
-            Id: '',
             IsActive: true
         }
     }
@@ -32,7 +31,7 @@ define('views/LayoutView',
             this.listenTo(TodoCollection, 'reset', this.addAll);
 
             // New
-            this.listenTo(TodoCollection, 'change:completed', this.filterOne);
+            this.listenTo(TodoCollection, 'change:IsActive', this.filterOne);
             this.listenTo(TodoCollection,'filter', this.filterAll);
             this.listenTo(TodoCollection, 'all', this.render);
         },
@@ -60,14 +59,18 @@ define('views/LayoutView',
                 this.$footer.hide();
             }
 
-            this.allCheckbox.checked = !inactive;
+            this.allCheckbox.checked = !active;
         },
         createOnEnter : function(event) {
             if (event.which != global.constants.ENTER_KEY || !this.$input.val().trim()) {
                 return
             }
 
-            TodoCollection.create(createTodo.call(this))
+            TodoCollection.create(createTodo.call(this), {
+                success: function(newItem, id){
+                    newItem.set('Id', id);
+                }
+            })
             this.$input.val('');
         },
         clearCompleted: function(){
@@ -79,7 +82,7 @@ define('views/LayoutView',
 
             TodoCollection.each(function( todo ) {
                 todo.save({
-                    'IsActive': isActive
+                    'IsActive': !isActive
                 });
             });
         },

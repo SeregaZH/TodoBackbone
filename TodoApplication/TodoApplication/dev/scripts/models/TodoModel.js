@@ -4,14 +4,17 @@
 define('models/TodoModel',['jquery','underscore', 'backbone'], function($,_,Backbone){
    var TodoModel = Backbone.Model.extend({
        initialize: function(){
-            this.set({'id': this.get('Id')});
        },
+       idAttribute: 'Id',
        defaults: {
-           Id: '',
            Name: '',
            Note: '',
-           IsActive: false,
-           id: ''
+           IsActive: true
+       },
+       toggle: function () {
+           this.save({
+               IsActive: !this.get('IsActive')
+           });
        }
    });
 
