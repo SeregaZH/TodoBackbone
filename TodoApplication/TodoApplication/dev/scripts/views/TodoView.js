@@ -15,6 +15,8 @@ define('views/TodoView',['jquery','underscore', 'backbone', 'global'], function(
         initialize: function() {
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'destroy', this.remove);
+            this.listenTo(this.model, 'visible', this.visible);
+            this.listenTo(this.model, 'hide', this.hide);
         },
         render: function() {
             this.$el.html( this.template( this.model.attributes ) );
@@ -45,6 +47,12 @@ define('views/TodoView',['jquery','underscore', 'backbone', 'global'], function(
         },
         toggle: function(){
             this.model.toggle();
+        },
+        visible: function(){
+            this.$el.removeClass('hidden');
+        },
+        hide: function(){
+            this.$el.addClass('hidden');
         }
     });
 

@@ -29,17 +29,8 @@ define('views/LayoutView',
 
             this.listenTo(TodoCollection, 'add', this.addOne);
             this.listenTo(TodoCollection, 'reset', this.addAll);
-
-            // New
             this.listenTo(TodoCollection, 'change:IsActive', this.filterOne);
-            this.listenTo(TodoCollection,'filter', this.filterAll);
             this.listenTo(TodoCollection, 'all', this.render);
-        },
-        filterOne: function(todo){
-            todo.trigger('visible');
-        },
-        filterAll: function(){
-            TodoCollection.each(this.filterOne, this);
         },
         render: function(){
             var active = TodoCollection.active().length;
@@ -53,6 +44,10 @@ define('views/LayoutView',
                     active: active,
                     inactive: inactive
                 }));
+                this.$('#filters li a')
+                    .removeClass('selected')
+                    .filter('[href="#/filter/' + (TodoCollection.getFilter() || '') + '"]')
+                    .addClass('selected');
 
             } else {
                 this.$main.hide();
@@ -93,6 +88,9 @@ define('views/LayoutView',
         addAll: function() {
             this.$('#todo-list').html('');
             TodoCollection.each(this.addOne, this);
+        },
+        filterOne: function(todo){
+            TodoCollection.filterOne(todo);
         }
     });
 

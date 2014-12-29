@@ -15,6 +15,12 @@ define('models/TodoModel',['jquery','underscore', 'backbone'], function($,_,Back
            this.save({
                IsActive: !this.get('IsActive')
            });
+       },
+       visible: function(){
+           this.trigger('visible');
+       },
+       hide: function(){
+           this.trigger('hide');
        }
    });
 
